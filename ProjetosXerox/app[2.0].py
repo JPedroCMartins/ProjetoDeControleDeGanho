@@ -16,13 +16,11 @@ class Funcs():
         self.entry_valor.delete(0, END)
     #Integração com banco de dados
     def conectaDB(self):
-        self.conn =  sqlite3.connect("banco.db")
+        self.conn = sqlite3.connect("banco.db")
         self.cursor = self.conn.cursor()
-        print("Banco conectado com sucesso!")
     # Integração com banco de dados
     def desconectaDB(self):
         self.conn.close()
-        print("Banco desconectado com sucesso!")
     #Funçao importante, pois ela cria o banco
     def MontaTabela(self):
         self.conectaDB()
@@ -31,7 +29,6 @@ class Funcs():
 
         self.cursor.execute(sql_code)
         self.conn.commit()
-        print("Tabela Montada!")
         self.desconectaDB()
     #Função para adicionar os valores no banco, chamado na função confirmar()
     def add_valores(self):
@@ -85,6 +82,14 @@ class Funcs():
         except:
             resultado = 0
             return resultado
+    def maiorId(self):
+        self.conectaDB()
+        self.cursor.execute('SELECT MAX(id) FROM banco_clientes')
+
+        maior_id = self.cursor.fetchone()[0]
+        self.desconectaDB()
+        return int(maior_id)
+
 
     #def deleta_linha(self):
     #    self.conectaDB()
@@ -106,14 +111,13 @@ class Funcs():
             valor_total_pix = self.soma("p")
             valor_total_caixa = self.soma("c")
             valor_bruto_total = float(valor_total_pix) + float(valor_total_caixa)
-
+            id = self.maiorId() + 1
             self.lbl1.config(text=f"Pix: R$ {valor_total_pix}")
             self.lbl2.config(text=f"Caixa: R$ {valor_total_caixa}")
             self.lbl3.config(text=f"Total: R$ {valor_bruto_total}")
+            self.lbl_id.config(text=f"ID: {id}")
         except:
             print("Sem Valor")
-
-
 
 #Função Principal da Aplicação
 class Application(Funcs):
@@ -134,7 +138,7 @@ class Application(Funcs):
     ## Configuração da Tela
     def tela(self):
         self.root.title("Gerenciamento de Ganhos [CAIXA]")
-        self.root.configure(background="#222847")
+        self.root.configure(background="black")
         self.root.geometry("720x1080")
         self.root.resizable(True, True)
         #self.root.maxsize(width=900, height=700)
@@ -142,10 +146,10 @@ class Application(Funcs):
 
     ## Frames da Tela, na minha aplicação foi dividido em 2 Frames
     def frame_da_tela(self):
-        self.frame_1 = Frame(self.root, bd = 4, highlightbackground="black", highlightthickness=3 )
+        self.frame_1 = Frame(self.root, bd = 4, highlightbackground="red", highlightthickness=3)
         self.frame_1.place(relx=0.02, rely=0.02, relwidth=0.96, relheight=0.36)
 
-        self.frame_2 = Frame(self.root, bd = 4, highlightbackground="black", highlightthickness=3)
+        self.frame_2 = Frame(self.root, bd = 4, highlightbackground="red", highlightthickness=3)
         self.frame_2.place(relx=0.02, rely=0.40, relwidth=0.96, relheight=0.56)
 
     ## Criação dos Widgets do Frame 1
@@ -157,24 +161,27 @@ class Application(Funcs):
         self.btn_confirmar.place(relx=0.40, rely=0.85, relwidth=0.20, relheight=0.15)
 
         ##Labels
-        self.lbl1 = Label(self.frame_1,text="PIX: ", font =fonte)
-        self.lbl1.place(relx=0.03, rely=0.03)
+        self.lbl1 = Label(self.frame_1,text="PIX: ", font =fonte, bd = 4, highlightbackground="green", highlightthickness=3)
+        self.lbl1.place(relx=0.03, rely=0.03, relwidth=0.3)
 
-        self.lbl2 = Label(self.frame_1,text="CAIXA: ", font =fonte)
-        self.lbl2.place(relx=0.03, rely=0.09)
+        self.lbl2 = Label(self.frame_1,text="CAIXA: ", font =fonte, bd = 4, highlightbackground="green", highlightthickness=3)
+        self.lbl2.place(relx=0.03, rely=0.13, relwidth=0.3)
 
-        self.lbl3 = Label(self.frame_1, text="TOTAL: ", font =fonte)
-        self.lbl3.place(relx=0.03, rely=0.16)
+        self.lbl3 = Label(self.frame_1, text="TOTAL: ", font =fonte, bd = 4, highlightbackground="green", highlightthickness=3)
+        self.lbl3.place(relx=0.67, rely=0.03, relwidth=0.3)
+
+        self.lbl_id = Label(self.frame_1, text="ID: ", font= fonte, bd = 4, highlightbackground="green", highlightthickness=3)
+        self.lbl_id.place(relx=0.67, rely=0.13, relwidth=0.3)
 
         ##atualizar cabeçario
         self.atualizarCabeca()
 
         ##Entry e Label da Entry
-        self.entry_valor = Entry(self.frame_1, font = fonte, justify="center", bd=4)
+        self.entry_valor = Entry(self.frame_1, font = fonte, justify="center", bd=2)
         self.entry_valor.place(relx=0.25, rely=0.25, relwidth=0.5, relheight=0.2)
 
         self.lbl4 = Label(self.frame_1, text="R$", font = fonte)
-        self.lbl4.place(relx=0.25, rely=0.31)
+        self.lbl4.place(relx=0.26, rely=0.31)
 
         ##Radiobuttons Pix e Caixa
 
@@ -187,15 +194,20 @@ class Application(Funcs):
         self.rd_pix.place(relx=0.25, rely=0.65)
 
     def tabela_frame2(self):
+
+        fonte = ("verdana", 14)
+        style = ttk.Style()
+        style.configure("Treeview", font = fonte)
+
         ##Criação da tabela, especificado em qual frame ela é filha, o height, e as colunas
         self.tabela = ttk.Treeview(self.frame_2, height= 3, columns=("id", "data", "forma", "total"))
-
+        self.tabela.configure(style="Treeview")
         ##Heading, a criação do cabeçalho, famoso "dando nome aos bois"
-        self.tabela.heading("#0", text="", )
-        self.tabela.heading("#1", text="Id")
-        self.tabela.heading("#2", text="Data")
-        self.tabela.heading("#3", text="Forma")
-        self.tabela.heading("#4", text="Total")
+        self.tabela.heading("#0", text="")
+        self.tabela.heading("#1", text="Id", anchor="w")
+        self.tabela.heading("#2", text="Data", anchor="w")
+        self.tabela.heading("#3", text="Forma", anchor="w")
+        self.tabela.heading("#4", text="Total", anchor="w")
 
         ##Alguns ajustes, CURIOSIDADE: essa tabela funciona como se "500" fosse 100%, ou seja, 200/500 = 0,4 que é 40%
         self.tabela.column("#0", width=1)
@@ -212,5 +224,6 @@ class Application(Funcs):
         self.scrollTabela.place(relx=0.98, rely=0.01, relwidth=0.02, relheight=0.95)
         ##DoubleClick
         #self.tabela.bind("<Double-1>", self.OnDoubleClick)
+
 if __name__ == "__main__":
     Application()
