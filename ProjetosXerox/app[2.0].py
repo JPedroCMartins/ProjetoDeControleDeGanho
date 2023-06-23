@@ -141,9 +141,8 @@ class Application(Funcs):
         self.root.configure(background="black")
         self.root.geometry("720x1080")
         self.root.resizable(True, True)
-        #self.root.maxsize(width=900, height=700)
-        #self.root.minsize(width=400, height=300)
-
+        #self.root.maxsize(width=720, height=1080)
+        self.root.minsize(width=420, height=720)
     ## Frames da Tela, na minha aplicação foi dividido em 2 Frames
     def frame_da_tela(self):
         self.frame_1 = Frame(self.root, bd = 4, highlightbackground="red", highlightthickness=3)
