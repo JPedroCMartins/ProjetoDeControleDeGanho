@@ -3,9 +3,9 @@ from tkinter import *
 from tkinter import ttk
 import sqlite3
 from datetime import datetime
+from ttkthemes import ThemedStyle
 
 root = Tk()
-
 
 # Classe para as funções da aplicação
 class Funcs:
@@ -95,7 +95,7 @@ class Funcs:
         try:
             resultado = float(resultado)
             return resultado
-        except():
+        except:
             resultado = 0
             return resultado
 
@@ -104,7 +104,11 @@ class Funcs:
         self.cursor.execute('SELECT MAX(id) FROM banco_clientes')
         maior_id = self.cursor.fetchone()[0]
         self.desconectaDB()
-        return int(maior_id)
+        try:
+            res = int(maior_id)
+            return res
+        except:
+            return 0
 
     # def deleta_linha(self):
     #    self.conectaDB()
@@ -137,6 +141,7 @@ class Application(Funcs):
     def __init__(self):
         ##IMPORTANTE: todas as funções criadas devem ser chamadas em ordem e antes do mainloop()
         super().__init__()
+        self.MontaTabela()
         self.frame_1 = None
         self.frame_2 = None
         self.btn_confirmar = None
@@ -149,15 +154,19 @@ class Application(Funcs):
         self.frame_da_tela()
         self.criando_widgets_frame1()
         self.tabela_frame2()
-        self.MontaTabela()
         self.atualizarCabeca()
         self.select_tabela()
         root.mainloop()
 
     ## Configuração da Tela
     def tela(self):
+        background_color = "#3c3f41"
+
+        style = ThemedStyle(root)
+        style.set_theme("classic")
+    
         self.root.title("Gerenciamento de Ganhos [CAIXA]")
-        self.root.configure(background="black")
+        self.root.configure(background=background_color)
         self.root.geometry("720x1080")
         self.root.resizable(True, True)
         # self.root.maxsize(width=720, height=1080)
@@ -165,53 +174,61 @@ class Application(Funcs):
 
     ## Frames da Tela, na minha aplicação foi dividido em 2 Frames
     def frame_da_tela(self):
-        self.frame_1 = Frame(self.root, bd=4, highlightbackground="red", highlightthickness=3)
+        self.hgb_color = "#323232"
+        self.bg_color = "#3c3f41"
+        self.frame_1 = Frame(self.root, bd=4, highlightbackground=self.hgb_color, highlightthickness=3, background=self.bg_color)
         self.frame_1.place(relx=0.02, rely=0.02, relwidth=0.96, relheight=0.36)
-        self.frame_2 = Frame(self.root, bd=4, highlightbackground="red", highlightthickness=3)
+        self.frame_2 = Frame(self.root, bd=4, highlightbackground=self.hgb_color, highlightthickness=3, background=self.bg_color)
         self.frame_2.place(relx=0.02, rely=0.40, relwidth=0.96, relheight=0.56)
 
     ## Criação dos Widgets do Frame 1
     def criando_widgets_frame1(self):
         fonte = ("verdana", 14, 'bold')
+        fonte_entry = ("verdana", 26, 'bold')
+        self.background_color = "#2b2b2b"
+        self.text_color = "#747a80"
         ##Botões
-        self.btn_confirmar = Button(self.frame_1, text="Confirmar", bd=4, bg="green", font=fonte,
-                                    command=self.confirmar)
+        self.btn_confirmar = Button(self.frame_1, text="Confirmar", bd=4, bg=self.hgb_color, font=fonte,
+                                    command=self.confirmar, fg="green")
         self.btn_confirmar.place(relx=0.40, rely=0.85, relwidth=0.20, relheight=0.15)
         ##Labels
-        self.lbl1 = Label(self.frame_1, text="PIX: ", font=fonte, bd=4, highlightbackground="green",
-                          highlightthickness=3)
+        self.lbl1 = Label(self.frame_1, text="PIX: ", font=fonte, bd=4, highlightbackground=self.hgb_color,
+                          highlightthickness=3, background=self.background_color, fg=self.text_color)
         self.lbl1.place(relx=0.03, rely=0.03, relwidth=0.3)
-        self.lbl2 = Label(self.frame_1, text="CAIXA: ", font=fonte, bd=4, highlightbackground="green",
-                          highlightthickness=3)
+        self.lbl2 = Label(self.frame_1, text="CAIXA: ", font=fonte, bd=4, highlightbackground=self.hgb_color,
+                          highlightthickness=3, background=self.background_color, fg=self.text_color )
         self.lbl2.place(relx=0.03, rely=0.13, relwidth=0.3)
-        self.lbl3 = Label(self.frame_1, text="TOTAL: ", font=fonte, bd=4, highlightbackground="green",
-                          highlightthickness=3)
+        self.lbl3 = Label(self.frame_1, text="TOTAL: ", font=fonte, bd=4, highlightbackground=self.hgb_color,
+                          highlightthickness=3, background=self.background_color, fg=self.text_color)
         self.lbl3.place(relx=0.67, rely=0.03, relwidth=0.3)
-        self.lbl_id = Label(self.frame_1, text="ID: ", font=fonte, bd=4, highlightbackground="green",
-                            highlightthickness=3)
+        self.lbl_id = Label(self.frame_1, text="ID: ", font=fonte, bd=4, highlightbackground=self.hgb_color,
+                            highlightthickness=3, background=self.background_color, fg=self.text_color)
         self.lbl_id.place(relx=0.67, rely=0.13, relwidth=0.3)
         ##atualizar cabeçalho
         self.atualizarCabeca()
         ##Entry e Label da Entry
-        self.entry_valor = Entry(self.frame_1, font=fonte, justify="center", bd=2)
-        self.entry_valor.place(relx=0.25, rely=0.25, relwidth=0.5, relheight=0.2)
-        self.lbl4 = Label(self.frame_1, text="R$", font=fonte)
+        self.entry_valor = Entry(self.frame_1, font=fonte_entry, justify="center", bd=2, background=self.background_color, fg="green")
+        self.entry_valor.place(relx=0.25, rely=0.30, relwidth=0.5, relheight=0.2)
+        self.lbl4 = Label(self.frame_1, text="R$", font=fonte, background=self.background_color, fg=self.text_color)
         self.lbl4.place(relx=0.26, rely=0.31)
         ##Radiobuttons Pix e Caixa
         self.rd_opt = tkinter.IntVar(value=1)
-        self.rd_caixa = Radiobutton(self.frame_1, text="CAIXA", variable=self.rd_opt, value=1, font=fonte)
-        self.rd_caixa.place(relx=0.25, rely=0.55)
-        self.rd_pix = Radiobutton(self.frame_1, text="PIX", variable=self.rd_opt, value=2, font=fonte)
-        self.rd_pix.place(relx=0.25, rely=0.65)
+        self.rd_caixa = Radiobutton(self.frame_1, text="CAIXA", variable=self.rd_opt, value=1, font=fonte, background=self.background_color, fg=self.text_color)
+        self.rd_caixa.place(relx=0.25, rely=0.55, relwidth=0.5)
+        self.rd_pix = Radiobutton(self.frame_1, text="PIX", variable=self.rd_opt, value=2, font=fonte, background=self.background_color, fg=self.text_color)
+        self.rd_pix.place(relx=0.25, rely=0.65, relwidth=0.5)
 
     def tabela_frame2(self):
         fonte = ("verdana", 14)
         style = ttk.Style()
-        style.configure("Treeview", font=fonte)
+        style.configure("Custom.Treeview", font=fonte, foreground=self.text_color)
+        style.configure("Treeview.Heading", font=fonte, background="#3c3f41", foreground=self.text_color)
         ##Criação da tabela, especificado em qual frame ela é filha, o height, e as colunas
         self.tabela = ttk.Treeview(self.frame_2, height=3, columns=("id", "data", "forma", "total"))
         self.tabela.configure(style="Treeview")
-        ##Heading, a criação do cabeçalho, famoso "dando nome aos bois"
+        self.tabela.configure(style="Treeview.Heading")
+        self.tabela.configure(style="Custom.Treeview")
+        ##Heading, a criação do cabeçalho
         self.tabela.heading("#0", text="")
         self.tabela.heading("#1", text="Id", anchor="w")
         self.tabela.heading("#2", text="Data", anchor="w")
@@ -227,7 +244,7 @@ class Application(Funcs):
         ##Scroll da tabela
         self.scrollTabela = Scrollbar(self.frame_2, orient="vertical")
         self.tabela.configure(yscrollcommand=self.scrollTabela.set)
-        self.scrollTabela.place(relx=0.98, rely=0.01, relwidth=0.02, relheight=0.95)
+        self.scrollTabela.place(relx=0.97, rely=0.06, relwidth=0.02, relheight=0.90)
         ##DoubleClick
         # self.tabela.bind("<Double-1>", self.OnDoubleClick)
 
