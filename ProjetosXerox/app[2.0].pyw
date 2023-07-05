@@ -135,7 +135,6 @@ class Funcs:
         except():
             print("Sem Valor")
 
-
 # Função Principal da Aplicação
 class Application(Funcs):
     def __init__(self):
@@ -191,6 +190,9 @@ class Application(Funcs):
         self.btn_confirmar = Button(self.frame_1, text="Confirmar", bd=4, bg=self.hgb_color, font=fonte,
                                     command=self.confirmar, fg="green")
         self.btn_confirmar.place(relx=0.40, rely=0.85, relwidth=0.20, relheight=0.15)
+
+        self.btn_outros = Button(self.frame_1, text="Outros", bd=4, bg=self.hgb_color, font=fonte, command=self.confirmar, fg="green")
+        self.btn_outros.place(relx=0.80, rely=0.85, relwidth=0.20, relheight=0.15)
         ##Labels
         self.lbl1 = Label(self.frame_1, text="PIX: ", font=fonte, bd=4, highlightbackground=self.hgb_color,
                           highlightthickness=3, background=self.background_color, fg=self.text_color)
