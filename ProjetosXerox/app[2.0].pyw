@@ -1,11 +1,13 @@
+import time
 import tkinter
 from tkinter import *
 from tkinter import ttk
 import sqlite3
 from datetime import datetime
 from ttkthemes import ThemedStyle
+import csv
 
-root = Tk()
+
 
 # Classe para as funções da aplicação
 class Funcs:
@@ -122,6 +124,33 @@ class Funcs:
     #        col1, col2, col3, col4 = self.tabela.item(n, 'values')
     #        self.entry_valor.insert(END, col4)
     # Função que atualiza as informações do cabeçalho
+
+    def opt_table(self):
+        time.sleep(0.5)
+        self.conectaDB()
+        # Recupere a lista de tabelas no banco de dados
+        self.cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+        tabelas = self.cursor.fetchall()
+
+        # Exporte cada tabela para um arquivo CSV
+        for tabela in tabelas:
+            nome_tabela = tabela[0]
+            nome_arquivo = f'{nome_tabela}.csv'
+
+            # Recupere os dados da tabela
+            self.cursor.execute(f"SELECT * FROM {nome_tabela};")
+            dados = self.cursor.fetchall()
+
+            # Escreva os dados no arquivo CSV
+            with open(nome_arquivo, 'w', newline='') as arquivo_csv:
+                writer = csv.writer(arquivo_csv)
+                writer.writerows(dados)
+
+        # Feche a conexão com o banco de dados
+        self.desconectaDB()
+        self.lbl_plan_status.config(text="Tabela Criada!")
+        time.sleep(1)
+
     def atualizarCabeca(self):
         try:
             valor_total_pix = self.soma("p")
@@ -134,12 +163,35 @@ class Funcs:
             self.lbl_id.config(text=f"ID: {id}")
         except():
             print("Sem Valor")
+class AppOpt(Funcs):
+    def __init__(self):
+        self.opt_root = Tk()
+        self.tela()
+        self.widget()
+        self.opt_root.mainloop()
+    def tela(self):
+        background_color = "#3c3f41"
 
+        style = ThemedStyle(self.opt_root)
+        style.set_theme("classic")
+
+        self.opt_root.title("Opções")
+        self.opt_root.configure(background=background_color)
+        self.opt_root.geometry("480x720")
+        self.opt_root.resizable(False, False)
+        # self.root.maxsize(width=720, height=1080)
+        self.opt_root.minsize(width=420, height=720)
+    def widget(self):
+        self.btn_plan = Button(self.opt_root, text="Criar Planilha", command=self.opt_table)
+        self.btn_plan.place(relx=0.05, rely=0.05, relwidth=0.20, relheight=0.05)
+        self.lbl_plan_status = Label(self.opt_root, text="STATUS")
+        self.lbl_plan_status.place(relx = 0.30, rely=0.05, relwidth=0.20, relheight=0.05)
 # Função Principal da Aplicação
 class Application(Funcs):
     def __init__(self):
         ##IMPORTANTE: todas as funções criadas devem ser chamadas em ordem e antes do mainloop()
         super().__init__()
+        root = Tk()
         self.MontaTabela()
         self.frame_1 = None
         self.frame_2 = None
@@ -161,7 +213,7 @@ class Application(Funcs):
     def tela(self):
         background_color = "#3c3f41"
 
-        style = ThemedStyle(root)
+        style = ThemedStyle(self.root)
         style.set_theme("classic")
     
         self.root.title("Gerenciamento de Ganhos [CAIXA]")
@@ -191,7 +243,7 @@ class Application(Funcs):
                                     command=self.confirmar, fg="green")
         self.btn_confirmar.place(relx=0.40, rely=0.85, relwidth=0.20, relheight=0.15)
 
-        self.btn_outros = Button(self.frame_1, text="Outros", bd=4, bg=self.hgb_color, font=fonte, command=self.confirmar, fg="green")
+        self.btn_outros = Button(self.frame_1, text="Outros", bd=4, bg=self.hgb_color, font=fonte, command=AppOpt, fg="green")
         self.btn_outros.place(relx=0.80, rely=0.85, relwidth=0.20, relheight=0.15)
         ##Labels
         self.lbl1 = Label(self.frame_1, text="PIX: ", font=fonte, bd=4, highlightbackground=self.hgb_color,
