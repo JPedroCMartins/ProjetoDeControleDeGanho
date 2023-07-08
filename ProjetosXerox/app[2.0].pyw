@@ -19,7 +19,7 @@ class Application(Funcs):
         ##IMPORTANTE: todas as funções criadas devem ser chamadas em ordem e antes do mainloop()
         super().__init__()
         root = Tk()
-        thread = threading.Thread(target=self.atLabel)
+        thread = threading.Thread(target=self.webstatus_impressora)
         thread.start()
         self.colors = Colors()
         self.MontaTabela()

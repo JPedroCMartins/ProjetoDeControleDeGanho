@@ -1,14 +1,11 @@
 import threading
 import time
 import csv
-import sqlite3
-
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.common.by import By
 from selenium import webdriver
-
 from datetime import datetime
-
+import sqlite3
 from tkinter import *
 import tkinter
 
@@ -33,7 +30,7 @@ class Funcs():
         self.select_tabela()
         self.atualizarCabeca()
         self.entry_valor.delete(0, END)
-        thread = threading.Thread(target=self.atLabel)
+        thread = threading.Thread(target=self.webstatus_impressora)
         thread.start()
 
     # Integração com banco de dados
@@ -187,7 +184,7 @@ class Funcs():
             self.paginas = "NaN"
             self.driver.quit()
 
-    def atLabel(self):
+    def webstatus_impressora(self):
         # Zerado dia 5 de Julho
         self.selenium()
         try:
@@ -195,4 +192,4 @@ class Funcs():
             self.vlr = self.pg * 0.50
             self.lbl_paginas['text'] = f"Valor em Real de:\nImpressões tiradas: R$ {self.vlr}"
         except:
-            self.lbl_paginas['text'] = f"Erro:\nServidor Web \nEmbutido da Impressora]"
+            self.lbl_paginas['text'] = f"Erro:\nServidor Web \nEmbutido da Impressora"
