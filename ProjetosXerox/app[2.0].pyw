@@ -1,18 +1,21 @@
-import time
-import tkinter
-from tkinter import *
-from tkinter import ttk
-import sqlite3
-from datetime import datetime
+import threading
+
+from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.common.by import By
 from ttkthemes import ThemedStyle
+from selenium import webdriver
+from datetime import datetime
+from tkinter import ttk
+import multiprocessing
+from tkinter import *
+import sqlite3
+import tkinter
+import time
 import csv
 
-
-
-# Classe para as funções da aplicação
-class Funcs:
+#Classe para as funções da aplicação
+class Funcs():
     total: float
-
     # Função do botão confirmar
     def __init__(self):
         self.lbl1 = None
@@ -32,6 +35,8 @@ class Funcs:
         self.select_tabela()
         self.atualizarCabeca()
         self.entry_valor.delete(0, END)
+        thread = threading.Thread(target=self.atLabel)
+        thread.start()
 
     # Integração com banco de dados
     def conectaDB(self):
@@ -161,8 +166,35 @@ class Funcs:
             self.lbl2.config(text=f"Caixa: R$ {valor_total_caixa}")
             self.lbl3.config(text=f"Total: R$ {valor_bruto_total}")
             self.lbl_id.config(text=f"ID: {id}")
+
         except():
             print("Sem Valor")
+
+    def selenium(self):
+        try:
+            options = Options()
+            options.add_argument("--headless")
+            options.log.level = "FATAL"
+
+            self.driver = webdriver.Firefox(options=options)
+            self.driver.get("http://192.168.0.254/#hId-pgUsageReport")
+            time.sleep(3)
+            element = self.driver.find_element(By.XPATH, '//*[@id="appUsageReport-ti"]')
+            time.sleep(0.5)
+            self.paginas = int(element.text)
+            self.driver.quit()
+            print("webdriver[FECHADO]")
+            print(f"paginas[{self.paginas}]")
+        except:
+            self.paginas = 1
+            self.driver.quit()
+
+    def atLabel(self):
+        # Zerado dia 5 de Julho
+        self.selenium()
+        self.pg = self.paginas - 16620
+        self.vlr = self.pg * 0.50
+        self.lbl_paginas['text'] = f"Valor em Real de:\nImpressões tiradas: R$ {self.vlr}"
 
 class Colors:
     def __init__(self):
@@ -170,6 +202,7 @@ class Colors:
         self.background_color = "#3c3f41"
         self.background_color1 = "#2b2b2b"
         self.fonte = ("verdana", 14, 'bold')
+        self.fonte_small = ("verdana", 9, "italic")
         self.fonte_entry = ("verdana", 26, 'bold')
         self.hgb_color = "#323232"
         self.fg_green = "green"
@@ -197,8 +230,8 @@ class AppOpt(Funcs):
         self.btn_plan = Button(self.opt_root, text="Criar Planilha", command=self.opt_table, bd=4, bg=self.colors.hgb_color, font=self.colors.fonte, fg=self.colors.fg_green)
         self.btn_plan.place(relx=0.05, rely=0.05, relwidth=0.50, relheight=0.05)
 
-        self.lbl_plan_status = Label(self.opt_root, text="STATUS")
-        self.lbl_plan_status.place(relx = 0.75, rely=0.05, relwidth=0.20, relheight=0.05)
+        self.lbl_plan_status = Label(self.opt_root, text="STATUS", font=self.colors.fonte, bd=4, highlightbackground=self.colors.hgb_color, highlightthickness=3, background=self.colors.background_color1, fg=self.colors.text_color)
+        self.lbl_plan_status.place(relx = 0.58, rely=0.05, relwidth=0.40, relheight=0.05)
 # Função Principal da Aplicação
 class Application(Funcs):
     def __init__(self):
@@ -263,6 +296,9 @@ class Application(Funcs):
 
         self.lbl_id = Label(self.frame_1, text="ID: ", font=self.colors.fonte, bd=4, highlightbackground=self.colors.hgb_color, highlightthickness=3, background=self.colors.background_color1, fg=self.colors.text_color)
         self.lbl_id.place(relx=0.67, rely=0.13, relwidth=0.3)
+
+        self.lbl_paginas = Label(self.frame_1, text=f"", font=self.colors.fonte_small, bd=4, highlightbackground=self.colors.hgb_color, highlightthickness=3, background=self.colors.background_color1, fg=self.colors.text_color)
+        self.lbl_paginas.place(relx=0.03, rely=0.85, relwidth=0.3)
         ##atualizar cabeçalho
         self.atualizarCabeca()
         ##Entry e Label da Entry
