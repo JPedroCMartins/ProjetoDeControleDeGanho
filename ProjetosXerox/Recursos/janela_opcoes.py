@@ -27,6 +27,14 @@ class AppOpt(Funcs):
     def widget(self):
         self.btn_plan = Button(self.opt_root, text="Criar Planilha", command=self.opt_table, bd=4, bg=self.colors.hgb_color, font=self.colors.fonte, fg=self.colors.fg_green)
         self.btn_plan.place(relx=0.05, rely=0.05, relwidth=0.50, relheight=0.05)
+        self.btn_contexto_impressora = Button(self.opt_root, text="Contexto Impressão", bd=4, command=self.contextoImpress, bg=self.colors.hgb_color, font=self.colors.fonte, fg=self.colors.fg_green)
+        self.btn_contexto_impressora.place(relx=0.05, rely=0.10, relwidth=0.50, relheight=0.05)
+
 
         self.lbl_plan_status = Label(self.opt_root, text="STATUS", font=self.colors.fonte, bd=4, highlightbackground=self.colors.hgb_color, highlightthickness=3, background=self.colors.background_color1, fg=self.colors.text_color)
         self.lbl_plan_status.place(relx = 0.58, rely=0.05, relwidth=0.40, relheight=0.05)
+
+        self.lbl_contexto = Label(self.opt_root, text="STATUS", font=self.colors.fonte, bd=4, highlightbackground=self.colors.hgb_color, highlightthickness=3, background=self.colors.background_color1, fg=self.colors.text_color)
+        self.lbl_contexto.place(relx = 0.58, rely=0.10, relwidth=0.40,relheight=0.05)
+if __name__ == "__main__":
+    AppOpt()

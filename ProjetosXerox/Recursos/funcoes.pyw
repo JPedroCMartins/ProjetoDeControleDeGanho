@@ -32,8 +32,11 @@ class Funcs():
         self.select_tabela()
         self.atualizarCabeca()
         self.entry_valor.delete(0, END)
+
+    def contextoImpress(self):
         thread = threading.Thread(target=self.webstatus_impressora)
         thread.start()
+        print("Selenium is run...")
 
     # Integração com banco de dados
     def conectaDB(self):
