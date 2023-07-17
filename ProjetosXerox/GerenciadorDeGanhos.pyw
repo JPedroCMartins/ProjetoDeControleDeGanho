@@ -8,6 +8,7 @@ from tkinter import *
 from Recursos import funcoes
 from Recursos import colors
 from Recursos import janela_opcoes
+from datetime import datetime
 
 Funcs = funcoes.Funcs
 Colors = colors.Colors
@@ -19,8 +20,6 @@ class Application(Funcs):
         ##IMPORTANTE: todas as funções criadas devem ser chamadas em ordem e antes do mainloop()
         super().__init__()
         root = Tk()
-        thread = threading.Thread(target=self.webstatus_impressora)
-        thread.start()
         self.colors = Colors()
         self.MontaTabela()
         self.frame_1 = None
@@ -80,8 +79,8 @@ class Application(Funcs):
         self.lbl_id = Label(self.frame_1, text="ID: ", font=self.colors.fonte, bd=4, highlightbackground=self.colors.hgb_color, highlightthickness=3, background=self.colors.background_color1, fg=self.colors.text_color)
         self.lbl_id.place(relx=0.67, rely=0.13, relwidth=0.3)
 
-        self.lbl_paginas = Label(self.frame_1, text=f"", font=self.colors.fonte_small, bd=4, highlightbackground=self.colors.hgb_color, highlightthickness=3, background=self.colors.background_color1, fg=self.colors.text_color)
-        self.lbl_paginas.place(relx=0.03, rely=0.85, relwidth=0.3)
+        self.lbl_dia = Label(self.frame_1, text=f"{datetime}", font=self.colors.fonte_small, bd=4, highlightbackground=self.colors.hgb_color, highlightthickness=3, background=self.colors.background_color1, fg=self.colors.text_color)
+        self.lbl_dia.place(relx=0.03, rely=0.85, relwidth=0.3)
         ##atualizar cabeçalho
         self.atualizarCabeca()
         ##Entry e Label da Entry

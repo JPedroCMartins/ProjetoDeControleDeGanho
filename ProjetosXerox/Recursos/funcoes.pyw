@@ -35,8 +35,9 @@ class Funcs():
 
     def contextoImpress(self):
         thread = threading.Thread(target=self.webstatus_impressora)
-        thread.start()
         print("Selenium is run...")
+        thread.start()
+
 
     # Integração com banco de dados
     def conectaDB(self):
@@ -166,31 +167,35 @@ class Funcs():
             self.lbl2.config(text=f"Caixa: R$ {valor_total_caixa}")
             self.lbl3.config(text=f"Total: R$ {valor_bruto_total}")
             self.lbl_id.config(text=f"ID: {id}")
+            data_atual = datetime.now()
+            data_formatada = data_atual.strftime("%d/%m/%y")
+            self.data = data_formatada
+            self.lbl_dia.config(text=f"{self.data}")
 
         except():
             print("Sem Valor")
 
     def selenium(self):
         try:
-            sys.stdout = open('log.txt', 'w')
-            sys.stderr = open('log.txt', 'w')
             options = Options()
             options.add_argument("--headless")
-            options.add_argument("--disable-gpu")
-            options.log.level = "FATAL"
 
             self.driver = webdriver.Firefox(options=options)
+            print("Driver inicializado!")
+
             self.driver.get("http://192.168.0.254/#hId-pgUsageReport")
+            print("Solicitando informações do sevidor embutido...")
             time.sleep(2)
             element = self.driver.find_element(By.XPATH, '//*[@id="appUsageReport-ti"]')
             time.sleep(0.2)
             self.paginas = int(element.text)
+            print("Informação coletada!")
             self.driver.quit()
-            sys.stdout.close()
-            sys.stderr.close()
+            print("Updated system")
         except:
             self.paginas = "NaN"
             self.driver.quit()
+            print("NaN")
 
 
     def webstatus_impressora(self):
@@ -199,6 +204,6 @@ class Funcs():
         try:
             self.pg = self.paginas - 16750
             self.vlr = self.pg * 0.50
-            self.lbl_paginas['text'] = f"Valor em Real de:\nImpressões tiradas: R$ {self.vlr}"
+            self.lbl_contexto['text'] = f"Impressões: R$ {self.vlr}"
         except:
-            self.lbl_paginas['text'] = f"Erro:\nServidor Web \nEmbutido da Impressora"
+            self.lbl_contexto['text'] = f"Erro"

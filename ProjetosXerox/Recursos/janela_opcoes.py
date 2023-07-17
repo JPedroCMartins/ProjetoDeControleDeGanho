@@ -3,6 +3,7 @@ from Recursos import colors
 from ttkthemes import ThemedStyle
 from tkinter import ttk
 from tkinter import *
+from datetime import datetime
 import tkinter
 Colors = colors.Colors
 Funcs = funcoes.Funcs
@@ -31,10 +32,10 @@ class AppOpt(Funcs):
         self.btn_contexto_impressora.place(relx=0.05, rely=0.10, relwidth=0.50, relheight=0.05)
 
 
-        self.lbl_plan_status = Label(self.opt_root, text="STATUS", font=self.colors.fonte, bd=4, highlightbackground=self.colors.hgb_color, highlightthickness=3, background=self.colors.background_color1, fg=self.colors.text_color)
+        self.lbl_plan_status = Label(self.opt_root, text="STATUS", font=self.colors.fonte_small, bd=4, highlightbackground=self.colors.hgb_color, highlightthickness=3, background=self.colors.background_color1, fg=self.colors.text_color)
         self.lbl_plan_status.place(relx = 0.58, rely=0.05, relwidth=0.40, relheight=0.05)
 
-        self.lbl_contexto = Label(self.opt_root, text="STATUS", font=self.colors.fonte, bd=4, highlightbackground=self.colors.hgb_color, highlightthickness=3, background=self.colors.background_color1, fg=self.colors.text_color)
+        self.lbl_contexto = Label(self.opt_root, text="STATUS", font=self.colors.fonte_small, bd=4, highlightbackground=self.colors.hgb_color, highlightthickness=3, background=self.colors.background_color1, fg=self.colors.text_color)
         self.lbl_contexto.place(relx = 0.58, rely=0.10, relwidth=0.40,relheight=0.05)
 if __name__ == "__main__":
     AppOpt()
