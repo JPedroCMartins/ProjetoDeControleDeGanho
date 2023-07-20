@@ -46,7 +46,8 @@ class Application(Funcs):
     
         self.root.title("Gerenciamento de Ganhos [CAIXA]")
         self.root.configure(background=self.colors.background_color)
-        self.root.geometry("720x1080")
+        #self.root.geometry("720x1080")
+        self.root.geometry("420x720")
         self.root.resizable(True, True)
         # self.root.maxsize(width=720, height=1080)
         self.root.minsize(width=420, height=720)
@@ -68,16 +69,16 @@ class Application(Funcs):
         self.btn_outros.place(relx=0.80, rely=0.85, relwidth=0.20, relheight=0.15)
         ##Labels
         self.lbl1 = Label(self.frame_1, text="PIX: ", font=self.colors.fonte, bd=4, highlightbackground=self.colors.hgb_color, highlightthickness=3, background=self.colors.background_color1, fg=self.colors.text_color)
-        self.lbl1.place(relx=0.03, rely=0.03, relwidth=0.3)
+        self.lbl1.place(relx=0.03, rely=0.03, relwidth=0.4)
 
-        self.lbl2 = Label(self.frame_1, text="CAIXA: ", font=self.colors.fonte, bd=4, highlightbackground=self.colors.hgb_color, highlightthickness=3, background=self.colors.background_color1, fg=self.colors.text_color)
-        self.lbl2.place(relx=0.03, rely=0.13, relwidth=0.3)
+        self.lbl2 = Label(self.frame_1, text="CARTEIRA: ", font=self.colors.fonte, bd=4, highlightbackground=self.colors.hgb_color, highlightthickness=3, background=self.colors.background_color1, fg=self.colors.text_color)
+        self.lbl2.place(relx=0.03, rely=0.15, relwidth=0.4)
 
         self.lbl3 = Label(self.frame_1, text="TOTAL: ", font=self.colors.fonte, bd=4, highlightbackground=self.colors.hgb_color, highlightthickness=3, background=self.colors.background_color1, fg=self.colors.text_color)
-        self.lbl3.place(relx=0.67, rely=0.03, relwidth=0.3)
+        self.lbl3.place(relx=0.57, rely=0.03, relwidth=0.4)
 
         self.lbl_id = Label(self.frame_1, text="ID: ", font=self.colors.fonte, bd=4, highlightbackground=self.colors.hgb_color, highlightthickness=3, background=self.colors.background_color1, fg=self.colors.text_color)
-        self.lbl_id.place(relx=0.67, rely=0.13, relwidth=0.3)
+        self.lbl_id.place(relx=0.57, rely=0.15, relwidth=0.4)
 
         self.lbl_dia = Label(self.frame_1, text=f"{datetime}", font=self.colors.fonte_small, bd=4, highlightbackground=self.colors.hgb_color, highlightthickness=3, background=self.colors.background_color1, fg=self.colors.text_color)
         self.lbl_dia.place(relx=0.03, rely=0.85, relwidth=0.3)
@@ -90,7 +91,7 @@ class Application(Funcs):
         self.lbl4.place(relx=0.26, rely=0.31)
         ##Radiobuttons Pix e Caixa
         self.rd_opt = tkinter.IntVar(value=1)
-        self.rd_caixa = Radiobutton(self.frame_1, text="CAIXA", variable=self.rd_opt, value=1, font=self.colors.fonte, background=self.colors.background_color1, fg=self.colors.text_color)
+        self.rd_caixa = Radiobutton(self.frame_1, text="CARTEIRA", variable=self.rd_opt, value=1, font=self.colors.fonte, background=self.colors.background_color1, fg=self.colors.text_color)
         self.rd_caixa.place(relx=0.25, rely=0.55, relwidth=0.5)
         self.rd_pix = Radiobutton(self.frame_1, text="PIX", variable=self.rd_opt, value=2, font=self.colors.fonte, background=self.colors.background_color1, fg=self.colors.text_color)
         self.rd_pix.place(relx=0.25, rely=0.65, relwidth=0.5)
@@ -98,8 +99,8 @@ class Application(Funcs):
     def tabela_frame2(self):
 
         style = ttk.Style()
-        style.configure("Custom.Treeview", font=self.colors.fonte, foreground=self.colors.text_color)
-        style.configure("Treeview.Heading", font=self.colors.fonte, background="#3c3f41", foreground=self.colors.text_color)
+        style.configure("Custom.Treeview", font=self.colors.fonte_small, foreground=self.colors.text_color)
+        style.configure("Treeview.Heading", font=self.colors.fonte_small, background="#3c3f41", foreground=self.colors.text_color)
         ##Criação da tabela, especificado em qual frame ela é filha, o height, e as colunas
         self.tabela = ttk.Treeview(self.frame_2, height=3, columns=("id", "data", "forma", "total"))
         self.tabela.configure(style="Treeview")
@@ -113,10 +114,10 @@ class Application(Funcs):
         self.tabela.heading("#4", text="Total", anchor="w")
         ##Alguns ajustes, CURIOSIDADE: essa tabela funciona como se "500" fosse 100%, ou seja, 200/500 = 0,4 que é 40%
         self.tabela.column("#0", width=1)
-        self.tabela.column("#1", width=50)
-        self.tabela.column("#2", width=200)
-        self.tabela.column("#3", width=200)
-        self.tabela.column("#4", width=100)
+        self.tabela.column("#1", width=10)
+        self.tabela.column("#2", width=90)
+        self.tabela.column("#3", width=50)
+        self.tabela.column("#4", width=50)
         self.tabela.place(relx=0.01, rely=0.01, relwidth=0.98, relheight=0.95)
         ##Scroll da tabela
         self.scrollTabela = Scrollbar(self.frame_2, orient="vertical")

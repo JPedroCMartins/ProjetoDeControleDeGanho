@@ -7,8 +7,8 @@ class Colors:
         #Background de não-profundidade
         self.background_color1 = "#2b2b2b"
         #Fontes
-        self.fonte = ("verdana", 14, 'bold')
-        self.fonte_small = ("verdana", 9, "italic")
+        self.fonte = ("Cascadia Code", 10, 'bold')
+        self.fonte_small = ("verdana", 8, "italic")
         self.fonte_entry = ("verdana", 26, 'bold')
         self.text_color = "#747a80"
         #Bordas

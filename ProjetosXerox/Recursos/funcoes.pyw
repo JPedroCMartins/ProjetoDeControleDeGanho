@@ -65,7 +65,7 @@ class Funcs():
         # self.data = data_atual
         self.forma = self.rd_opt.get()
         if self.forma == 1:
-            self.forma = "CAIXA"
+            self.forma = "CARTEIRA"
         elif self.forma == 2:
             self.forma = "PIX"
         total_str = str(self.entry_valor.get())
@@ -94,7 +94,7 @@ class Funcs():
         if p_ou_c == "p":
             self.forma = "PIX"
         elif p_ou_c == "c":
-            self.forma = "CAIXA"
+            self.forma = "CARTEIRA"
         self.conectaDB()
         sql_code = f"SELECT SUM(total) FROM banco_clientes WHERE forma = '{self.forma}'"
         self.cursor.execute(sql_code)
@@ -164,7 +164,7 @@ class Funcs():
             valor_bruto_total = float(valor_total_pix) + float(valor_total_caixa)
             id = self.maiorId() + 1
             self.lbl1.config(text=f"Pix: R$ {valor_total_pix}")
-            self.lbl2.config(text=f"Caixa: R$ {valor_total_caixa}")
+            self.lbl2.config(text=f"Carteira: R$ {valor_total_caixa}")
             self.lbl3.config(text=f"Total: R$ {valor_bruto_total}")
             self.lbl_id.config(text=f"ID: {id}")
             data_atual = datetime.now()
